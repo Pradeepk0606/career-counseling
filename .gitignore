@@ -1,0 +1,15 @@
+# Python
+*.pyc
+__pycache__/
+env/
+venv/
+db.sqlite3
+
+# Node.js
+node_modules/
+
+# Env
+.env
+
+# Django static files (optional if built externally)
+staticfiles/
