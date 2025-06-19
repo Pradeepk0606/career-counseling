@@ -1,46 +1,42 @@
-1. https://github.com/
 
-Pythonian/
 
-career_counseling.git
-
-2. Change into the directory of the cloned repo
+1. Change into the directory of the cloned repo
    ```sh
    cd career_counseling
    ```
-3. Setup a Python virtual environment and activate it
+2.. Setup a Python virtual environment and activate it
    ```sh
    make venv
    env\Scripts\activate
 
    ```
-4. Install project requirements
+3. Install project requirements
    ```sh
    make install
    ```
-5. Copy and edit environment variables with desired values
+4. Copy and edit environment variables with desired values
    ```sh
    cp .env.example .env
    ```
-6. Run database migrations
+5. Run database migrations
    ```sh
    make migrate
    ```
-7. Create an admin superuser
+6. Create an admin superuser
    ```sh
    make admin
    ```
    _Note: Use `admin` for both the `username` and `password`, and skip entering the `email`. Also type `y` to bypass Password validation._
 
-8. Populate the database with fake data (Optional)
+7. Populate the database with fake data (Optional)
    ```sh
    make populatedb
    ```
-9. Run the development server
+8. Run the development server
    ```sh
    make run
    ```
-10. Visit the URL in your browser
+9. Visit the URL in your browser
    ```sh
    127.0.0.1:8000
    ```
