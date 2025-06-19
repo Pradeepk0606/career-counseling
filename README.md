@@ -1,10 +1,9 @@
-https://github.com/
+1. https://github.com/
 
 Pythonian/
 
 career_counseling.git
 
-   ```
 2. Change into the directory of the cloned repo
    ```sh
    cd career_counseling
