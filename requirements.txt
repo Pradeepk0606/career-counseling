@@ -4,3 +4,5 @@ Django==5.0.4
 Faker==24.9.0
 python-decouple==3.8
 pre-commit==3.7.0
+whitenoise>=6.6.0
+gunicorn>=21.2.0

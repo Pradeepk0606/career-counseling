@@ -4,12 +4,21 @@ __pycache__/
 env/
 venv/
 db.sqlite3
+.coverage
+htmlcov/
+.cache/
+.pytest_cache/
 
 # Node.js
 node_modules/
 
 # Env
 .env
+.env.local
 
-# Django static files (optional if built externally)
+# Vercel
+.vercel/
+
+# Django static files
 staticfiles/
+assets/

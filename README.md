@@ -1,56 +1,103 @@
+# Career Compass 🎓
 
+> **Career Compass** is a Django-powered Web Application designed to analyze student academic performance (JSS1 – JSS3) and recommend personalized career fields and higher-education disciplines.
 
-1. Change into the directory of the cloned repo
-   ```sh
-   cd career_counseling
-   ```
-2.. Setup a Python virtual environment and activate it
-   ```sh
-   make venv
-   env\Scripts\activate
+---
 
-   ```
-3. Install project requirements
-   ```sh
-   make install
-   ```
-4. Copy and edit environment variables with desired values
-   ```sh
-   cp .env.example .env
-   ```
-5. Run database migrations
-   ```sh
-   make migrate
-   ```
-6. Create an admin superuser
-   ```sh
-   make admin
-   ```
-   _Note: Use `admin` for both the `username` and `password`, and skip entering the `email`. Also type `y` to bypass Password validation._
+## 🌟 Key Features
 
-7. Populate the database with fake data (Optional)
-   ```sh
-   make populatedb
-   ```
-8. Run the development server
-   ```sh
-   make run
-   ```
-9. Visit the URL in your browser
-   ```sh
-   127.0.0.1:8000
-   ```
-   You can also visit the admin dashboard in a new tab and login with the credentials created in step 7.
-   ```sh
-   127.0.0.1:8000/admin/
-   ```
+- **Access Code Student Portal**: Fast, secure dashboard access for students using unique 7-digit access codes.
+- **Academic Analytics & Performance Charts**: Dynamic visual score tracking across grade levels and session terms powered by Chart.js.
+- **Career Path Prediction Algorithm**: Intelligently aggregates top-performing subject fields to recommend matching career disciplines.
+- **Interactive AI Career Assistant**: Built-in interactive guidance chat interface.
+- **Production & Vercel Ready**: Full WSGI support, WhiteNoise static file compression, and standard environment variable management.
 
-If you went ahead with the optional step (8), you can copy the access code for one of the students here `http://127.0.0.1:8000/admin/career/student/` and use it to access the student assessment dashboard.
+---
 
-## Running Tests
+## 🚀 Quick Start Guide
 
-To run tests, run the following command
+### 1. Clone the Repository
 
 ```bash
-   make test
+git clone https://github.com/Pradeepk0606/career-counseling.git
+cd career-counseling
 ```
+
+### 2. Set Up Virtual Environment
+
+```bash
+python -m venv venv
+# On Windows PowerShell:
+.\venv\Scripts\activate
+# On Linux / macOS:
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Environment Setup
+
+Copy `.env.example` to `.env`:
+
+```bash
+cp .env.example .env
+```
+
+### 5. Run Database Migrations
+
+```bash
+python manage.py migrate
+```
+
+### 6. Create Admin Superuser
+
+```bash
+python manage.py createsuperuser
+```
+
+### 7. Populate Sample Student Data (Optional)
+
+```bash
+python manage.py populate_db 5
+```
+
+### 8. Run Development Server
+
+```bash
+python manage.py runserver
+```
+
+Visit [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser. Access the Admin Panel at [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin).
+
+---
+
+## 🧪 Running Unit Tests
+
+Run the complete Django test suite:
+
+```bash
+python manage.py test
+```
+
+---
+
+## ☁️ Deploying to Vercel
+
+This repository includes a native `vercel.json` configuration for seamless deployment:
+
+1. Import the repository into your [Vercel Dashboard](https://vercel.com).
+2. Set Environment Variables in Vercel project settings (optional):
+   - `SECRET_KEY`: Production secret key.
+   - `DEBUG`: `False`
+   - `ALLOWED_HOSTS`: `.vercel.app`
+3. Click **Deploy**. Vercel will automatically build the WSGI application and serve static assets via WhiteNoise.
+
+---
+
+## 📝 License
+
+Distributed under the MIT License. See `LICENSE` for details.

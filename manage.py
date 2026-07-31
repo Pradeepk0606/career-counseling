@@ -3,6 +3,19 @@
 import os
 import sys
 
+# Python 3.14 compatibility patch for Django template context copying
+try:
+    import django.template.context
+
+    def _fixed_basecontext_copy(self):
+        duplicate = self.__class__.__new__(self.__class__)
+        duplicate.dicts = self.dicts[:]
+        return duplicate
+
+    django.template.context.BaseContext.__copy__ = _fixed_basecontext_copy
+except Exception:
+    pass
+
 
 def main():
     """Run administrative tasks."""
@@ -20,3 +33,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

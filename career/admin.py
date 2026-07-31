@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
@@ -29,9 +30,7 @@ class StudentAdmin(admin.ModelAdmin):
     Custom admin configuration for the Student model.
     """
 
-    # The Inline enables the record to be updated alongside Student object
     inlines = [AssessmentScoreInline]
-    # Sets the field which should be displayed on the admin change list page
     list_display = ["name", "entry_code", "email"]
     search_fields = ["name", "email"]
 
@@ -39,18 +38,19 @@ class StudentAdmin(admin.ModelAdmin):
         """
         Override save_model method to send an email when creating a student.
         """
-        if not change:  # Check if the student object is being created
+        if not change:
             entry_code = obj.entry_code
 
-            # Email sending logic
             subject = "Your Entry Code"
             message = f"Hello {obj.name},\n\nYour entry code for www.careercompass.com is: {entry_code}\n\nPlease keep this code safe and use it for future references.\n\nBest regards,\nYour School Team"
-            from_email = "admin@careercompass.com"
+
+            from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "admin@careercompass.com")
             recipient_list = [obj.email]
 
             send_mail(subject, message, from_email, recipient_list)
 
         super().save_model(request, obj, form, change)
+
 
 
 @admin.register(Subject)
