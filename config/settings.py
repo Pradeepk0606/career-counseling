@@ -81,20 +81,21 @@ if IS_VERCEL:
             shutil.copyfile(initial_db, db_path)
         except Exception:
             pass
-    default_db_name = str(db_path)
+    target_db_name = str(db_path)
 else:
-    default_db_name = str(BASE_DIR / "db.sqlite3")
+    target_db_name = config("SQL_DATABASE", default=str(BASE_DIR / "db.sqlite3"))
 
 DATABASES = {
     "default": {
         "ENGINE": config("SQL_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": config("SQL_DATABASE", default=default_db_name),
+        "NAME": target_db_name,
         "USER": config("SQL_USER", default=""),
         "PASSWORD": config("SQL_PASSWORD", default=""),
         "HOST": config("SQL_HOST", default=""),
         "PORT": config("SQL_PORT", default=""),
     },
 }
+
 
 
 AUTH_PASSWORD_VALIDATORS = [

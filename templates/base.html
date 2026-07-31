@@ -7,13 +7,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock title %} | Career Compass</title>
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles/fontawesome/all.min.css' %}">
     <link href="{% static 'styles/bootstrap.min.css' %}" rel="stylesheet">
     <style>
-        .navbar-brand i { transition: transform 0.2s ease; }
-        .navbar-brand:hover i { transform: scale(1.15) rotate(-5deg); }
-        .chat-bubble-user { background-color: #0d6efd; color: white; border-radius: 12px 12px 0 12px; padding: 8px 12px; max-width: 80%; float: right; clear: both; margin-bottom: 8px; }
-        .chat-bubble-bot { background-color: #e9ecef; color: #212529; border-radius: 12px 12px 12px 0; padding: 8px 12px; max-width: 80%; float: left; clear: both; margin-bottom: 8px; }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --hero-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --card-glass: rgba(255, 255, 255, 0.92);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+        }
+        .navbar-custom {
+            background: var(--hero-gradient);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .navbar-brand i { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .navbar-brand:hover i { transform: scale(1.2) rotate(-10deg); }
+        
+        .chat-bubble-user {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 16px 16px 2px 16px;
+            padding: 10px 16px;
+            max-width: 80%;
+            float: right;
+            clear: both;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            font-size: 0.95rem;
+        }
+        .chat-bubble-bot {
+            background: #ffffff;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px 16px 16px 2px;
+            padding: 12px 16px;
+            max-width: 85%;
+            float: left;
+            clear: both;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            font-size: 0.95rem;
+        }
+        .floating-chat-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1050;
+            background: var(--accent-gradient);
+            color: white;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+            border: None;
+            transition: all 0.3s ease;
+        }
+        .floating-chat-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            color: white;
+        }
+        .chip-btn {
+            font-size: 0.8rem;
+            border-radius: 20px;
+            padding: 4px 12px;
+            transition: all 0.2s ease;
+        }
+        .chip-btn:hover {
+            background-color: #3b82f6;
+            color: white !important;
+        }
     </style>
 </head>
 
@@ -21,46 +97,50 @@
 
     {% if messages %}
     {% for message in messages %}
-    <div class="m-0 rounded-0 alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        <div class="container">
-            <i class="fa-solid fa-{% if message.tags == 'warning' %}triangle-exclamation{% else %}circle-check{% endif %} me-2"></i> {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="m-0 rounded-0 alert alert-{{ message.tags }} alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <div class="container d-flex align-items-center">
+            <i class="fa-solid fa-{% if message.tags == 'warning' %}triangle-exclamation text-warning{% else %}circle-check text-success{% endif %} fs-5 me-2"></i>
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
     {% endfor %}
     {% endif %}
 
     <header class="flex-shrink-0">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm py-3">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3">
             <div class="container">
-                <a class="navbar-brand fw-bold fs-4 d-flex align-items-center" href="{% url 'home' %}">
-                    <i class="fa-solid fa-compass me-2 text-warning"></i> Career Compass
+                <a class="navbar-brand fw-bold fs-3 d-flex align-items-center text-white" href="{% url 'home' %}">
+                    <i class="fa-solid fa-compass me-2 text-warning fs-2"></i> Career Compass
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
-                        <li class="nav-item"><a class="nav-link text-white fw-semibold" href="{% url 'home' %}"><i class="fa-solid fa-house me-1"></i> Home</a></li>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-medium px-3" href="{% url 'home' %}"><i class="fa-solid fa-house me-1 opacity-75"></i> Home</a>
+                        </li>
                         {% if request.session.entry_code %}
-                        <li class="nav-item"><a class="nav-link text-white fw-semibold" href="{% url 'assessment' %}"><i class="fa-solid fa-chart-pie me-1"></i> Dashboard</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-medium px-3" href="{% url 'assessment' %}"><i class="fa-solid fa-chart-pie me-1 opacity-75"></i> My Dashboard</a>
+                        </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="https://roadmap.sh" target="_blank" rel="noopener"><i class="fa-solid fa-map me-1"></i> Roadmaps</a>
+                            <a class="nav-link text-white-50 px-3" href="https://roadmap.sh" target="_blank" rel="noopener"><i class="fa-solid fa-map me-1 opacity-75"></i> Career Roadmaps</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" href="/admin/" target="_blank"><i class="fa-solid fa-user-shield me-1"></i> Admin Portal</a>
+                            <a class="nav-link text-white fw-medium px-3" href="/admin/" target="_blank"><i class="fa-solid fa-user-shield me-1 opacity-75 text-warning"></i> Admin Portal</a>
                         </li>
-
                     </ul>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn btn-outline-light btn-sm fw-bold rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#geminiChatbot">
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <button class="btn btn-outline-light btn-sm fw-bold rounded-pill px-3 py-2" data-bs-toggle="modal" data-bs-target="#geminiChatbot">
                             <i class="fa-solid fa-robot me-1 text-warning"></i> AI Assistant
                         </button>
                         {% if request.session.entry_code %}
-                        <button data-bs-target="#endSession" data-bs-toggle="modal" class="btn btn-warning btn-sm fw-bold rounded-pill px-3"><i class="fa-solid fa-right-from-bracket me-1"></i> End Session</button>
+                        <button data-bs-target="#endSession" data-bs-toggle="modal" class="btn btn-warning btn-sm fw-bold rounded-pill px-4 py-2"><i class="fa-solid fa-right-from-bracket me-1"></i> End Session</button>
                         {% else %}
-                        <button data-bs-target="#enterCode" data-bs-toggle="modal" class="btn btn-light btn-sm text-primary fw-bold rounded-pill px-3"><i class="fa-solid fa-key me-1"></i> Enter Code</button>
+                        <button data-bs-target="#enterCode" data-bs-toggle="modal" class="btn btn-light text-primary btn-sm fw-bold rounded-pill px-4 py-2 shadow-sm"><i class="fa-solid fa-key me-1"></i> Enter Code</button>
                         {% endif %}
                     </div>
                 </div>
@@ -72,39 +152,60 @@
         {% block content %}{% endblock content %}
     </main>
 
+    <!-- Floating AI Chat Launcher Button -->
+    <button class="floating-chat-btn" data-bs-toggle="modal" data-bs-target="#geminiChatbot" title="Launch Career AI Assistant">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+
     <footer class="bg-dark text-white py-4 mt-auto border-top border-secondary">
         <div class="container">
             <div class="row align-items-center justify-content-between flex-column flex-sm-row">
                 <div class="col-auto">
-                    <div class="small text-white-50">&copy; {% now "Y" %} Career Compass &bull; All rights reserved.</div>
+                    <div class="small text-white-50">&copy; {% now "Y" %} Career Compass &bull; Intelligent Guidance Portal.</div>
                 </div>
-                <div class="col-auto">
-                    <span class="small text-white-50">Empowering Academic & Career Futures</span>
+                <div class="col-auto mt-2 mt-sm-0">
+                    <a href="/admin/" class="small text-white-50 text-decoration-none me-3"><i class="fa-solid fa-shield-halved me-1"></i> Admin Portal</a>
+                    <span class="small text-white-50">Empowering Student Futures</span>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- AI Career Assistant Modal -->
+    <!-- Interactive AI Career Assistant Modal -->
     <div class="modal fade" id="geminiChatbot" tabindex="-1" aria-labelledby="geminiChatbotLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg rounded-4">
-                <div class="modal-header bg-primary text-white rounded-top-4">
-                    <h5 class="modal-title fw-bold" id="geminiChatbotLabel">
-                        <i class="fa-solid fa-robot text-warning me-2"></i> Career Assistant
-                    </h5>
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header text-white p-4" style="background: var(--hero-gradient);">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 44px; height: 44px;">
+                            <i class="fa-solid fa-robot fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold m-0" id="geminiChatbotLabel">AI Career Advisor</h5>
+                            <small class="text-white-50">Ask about subjects, scoring algorithms, or career paths</small>
+                        </div>
+                    </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <div id="chat-window" class="p-3 rounded-3 border bg-light overflow-auto" style="height: 380px;">
+                <div class="modal-body p-4 bg-light">
+                    <!-- Suggested Chips -->
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+                        <span class="text-muted small fw-semibold me-1 align-self-center">Suggested:</span>
+                        <button class="btn btn-outline-primary btn-sm chip-btn prompt-chip" data-prompt="Science Careers">🔬 Science Careers</button>
+                        <button class="btn btn-outline-primary btn-sm chip-btn prompt-chip" data-prompt="Technical Fields">⚙️ Technical & Engineering</button>
+                        <button class="btn btn-outline-primary btn-sm chip-btn prompt-chip" data-prompt="Commercial & Business">💼 Commercial Fields</button>
+                        <button class="btn btn-outline-primary btn-sm chip-btn prompt-chip" data-prompt="How scoring works">📊 How scoring works</button>
+                    </div>
+
+                    <div id="chat-window" class="p-3 rounded-4 border bg-white overflow-auto shadow-inner" style="height: 350px;">
                         <div class="chat-bubble-bot shadow-sm">
-                            <strong>Assistant:</strong> Hello! Ask me anything about subject fields, career disciplines, or higher education pathways!
+                            <strong>AI Advisor:</strong> 👋 Hello! Welcome to <strong>Career Compass</strong>. Ask me anything about subject performance, grade breakdowns, or career field recommendations!
                         </div>
                     </div>
 
-                    <div class="input-group mt-3">
-                        <input type="text" id="chat-input" class="form-control rounded-start-pill ps-3" placeholder="Type your career question here...">
-                        <button id="send-button" class="btn btn-primary rounded-end-pill px-4 fw-bold">Send</button>
+                    <div class="input-group mt-3 shadow-sm rounded-pill overflow-hidden bg-white p-1 border">
+                        <input type="text" id="chat-input" class="form-control border-0 ps-3 bg-transparent" placeholder="Type your career question here...">
+                        <button id="send-button" class="btn btn-primary rounded-pill px-4 fw-bold"><i class="fa-solid fa-paper-plane me-1"></i> Send</button>
                     </div>
                 </div>
             </div>
@@ -114,32 +215,36 @@
     <!-- Access Code Modal -->
     <div class="modal fade" id="enterCode" tabindex="-1" aria-labelledby="enterCodeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-primary" id="enterCodeLabel"><i class="fa-solid fa-key me-2"></i> Student Access Code</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header p-4 text-white" style="background: var(--hero-gradient);">
+                    <h5 class="modal-title fw-bold m-0" id="enterCodeLabel"><i class="fa-solid fa-key text-warning me-2"></i> Student Access Portal</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" action="{% url 'home' %}">
                     {% csrf_token %}
-                    <div class="modal-body py-3">
+                    <div class="modal-body p-4">
                         {% for error in form.non_field_errors %}
                         <div class="alert alert-danger mb-3" role="alert">
                             {{ error }}
                         </div>
                         {% endfor %}
-                        <div class="form-group mb-2">
+                        <div class="form-group mb-3">
                             <label class="form-label text-muted small fw-semibold">Enter your 7-digit access code</label>
                             {% for error in form.entry_code.errors %}
                             <div class="alert alert-danger py-2 mb-2 small" role="alert">
                                 <i class="fa-solid fa-circle-exclamation me-1"></i> {{ error }}
                             </div>
                             {% endfor %}
-                            {{ form.entry_code }}
+                            <input type="text" name="entry_code" id="accessCodeInput" class="form-control form-control-lg rounded-3 text-center fw-bold letter-spacing-2" placeholder="e.g. 1234567" required>
+                        </div>
+                        <div class="bg-light p-3 rounded-3 border d-flex align-items-center justify-content-between">
+                            <span class="small text-muted"><i class="fa-solid fa-circle-info text-primary me-1"></i> Quick Test Code:</span>
+                            <button type="button" id="useDemoCodeBtn" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">Use Code 1234567</button>
                         </div>
                     </div>
-                    <div class="modal-footer border-0 pt-0">
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 fw-bold"><i class="fa-solid fa-right-to-bracket me-1"></i> Access Dashboard</button>
+                    <div class="modal-footer bg-light border-0 p-3 d-flex justify-content-between">
+                        <button class="btn btn-outline-secondary rounded-pill px-4" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold"><i class="fa-solid fa-right-to-bracket me-1"></i> Access Dashboard</button>
                     </div>
                 </form>
             </div>
@@ -149,19 +254,19 @@
     <!-- End Session Modal -->
     <div class="modal fade" id="endSession" tabindex="-1" aria-labelledby="endSessionLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-primary" id="endSessionLabel"><i class="fa-solid fa-right-from-bracket me-2"></i> End Session</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+                <div class="modal-header p-4 text-white" style="background: var(--hero-gradient);">
+                    <h5 class="modal-title fw-bold m-0" id="endSessionLabel"><i class="fa-solid fa-right-from-bracket text-warning me-2"></i> End Session</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body py-3 text-muted">
-                    Are you sure you want to end your dashboard session?
+                <div class="modal-body p-4 text-muted fs-5">
+                    Are you sure you want to end your current dashboard session?
                 </div>
-                <div class="modal-footer border-0 pt-0">
+                <div class="modal-footer bg-light border-0 p-3">
                     <form method="post" action="{% url 'end_session' %}">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-sm btn-danger rounded-pill px-4 fw-bold"><i class="fa-solid fa-right-from-bracket me-1"></i> End Session</button>
+                        <button class="btn btn-outline-secondary rounded-pill px-4 me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold"><i class="fa-solid fa-right-from-bracket me-1"></i> End Session</button>
                     </form>
                 </div>
             </div>
@@ -177,33 +282,70 @@
         const sendButton = document.getElementById("send-button");
         const chatWindow = document.getElementById("chat-window");
         const chatInput = document.getElementById("chat-input");
+        const useDemoCodeBtn = document.getElementById("useDemoCodeBtn");
+        const accessCodeInput = document.getElementById("accessCodeInput");
+
+        if (useDemoCodeBtn && accessCodeInput) {
+            useDemoCodeBtn.addEventListener("click", function() {
+                accessCodeInput.value = "1234567";
+                accessCodeInput.focus();
+            });
+        }
+
+        function addBotReply(text) {
+            const botDiv = document.createElement("div");
+            botDiv.className = "chat-bubble-bot shadow-sm";
+            botDiv.innerHTML = '<strong>AI Advisor:</strong> ' + text;
+            chatWindow.appendChild(botDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function handleUserMessage(userMessage) {
+            if (!userMessage.trim()) return;
+            const userDiv = document.createElement("div");
+            userDiv.className = "chat-bubble-user shadow-sm";
+            userDiv.innerHTML = '<strong>You:</strong> ' + userMessage;
+            chatWindow.appendChild(userDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            const msgLower = userMessage.toLowerCase();
+            let reply = "Great question! Career Compass evaluates continuous assessment scores (0-40) and exam results (0-60) from JSS1 to JSS3 to highlight your top subject fields.";
+
+            if (msgLower.includes("science") || msgLower.includes("doctor") || msgLower.includes("medicine")) {
+                reply = "🔬 <strong>Science Disciplines:</strong> High scores in Basic Science & Agricultural Science lead to fields like <em>Medical Doctor, Research Scientist, Environmental Scientist, and Biotechnologist</em>.";
+            } else if (msgLower.includes("tech") || msgLower.includes("engineering") || msgLower.includes("computer")) {
+                reply = "⚙️ <strong>Technical Disciplines:</strong> Excellence in Basic Technology & PHE aligns with <em>Engineering, IT & Cybersecurity, Sports Coaching, and Systems Design</em>.";
+            } else if (msgLower.includes("commercial") || msgLower.includes("business") || msgLower.includes("finance")) {
+                reply = "💼 <strong>Commercial Disciplines:</strong> Strong scores in Business Studies pave the way for <em>Accounting & Finance, Marketing & Advertising, and Business Management</em>.";
+            } else if (msgLower.includes("humanities") || msgLower.includes("art") || msgLower.includes("law")) {
+                reply = "📚 <strong>Humanities Disciplines:</strong> Top grades in Social Studies & History lead to <em>Public Policy, Archaeology, Fine Arts, and Social Sciences Research</em>.";
+            } else if (msgLower.includes("score") || msgLower.includes("how") || msgLower.includes("calculate")) {
+                reply = "📊 <strong>Scoring System:</strong> Each subject total is calculated as: <strong>Continuous Assessment (Max 40) + Exam Score (Max 60) = Total Score (Max 100)</strong>. The system groups your top 3 non-general subjects to recommend your most suitable field.";
+            }
+
+            setTimeout(function () {
+                addBotReply(reply);
+            }, 500);
+        }
 
         if (sendButton && chatInput && chatWindow) {
             sendButton.addEventListener("click", function () {
-                const userMessage = chatInput.value.trim();
-                if (userMessage) {
-                    const userDiv = document.createElement("div");
-                    userDiv.className = "chat-bubble-user shadow-sm";
-                    userDiv.innerHTML = '<strong>You:</strong> ' + userMessage;
-                    chatWindow.appendChild(userDiv);
-                    chatInput.value = '';
-
-                    setTimeout(function () {
-                        const botDiv = document.createElement("div");
-                        botDiv.className = "chat-bubble-bot shadow-sm";
-                        botDiv.innerHTML = '<strong>Assistant:</strong> Great question! Focus on high-performing subject fields like Science, Commerce, and Humanities to unlock your targeted career path.';
-                        chatWindow.appendChild(botDiv);
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                    }, 600);
-
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }
+                const userMsg = chatInput.value;
+                handleUserMessage(userMsg);
+                chatInput.value = '';
             });
 
             chatInput.addEventListener("keypress", function (e) {
                 if (e.key === "Enter") {
                     sendButton.click();
                 }
+            });
+
+            document.querySelectorAll(".prompt-chip").forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    const prompt = this.getAttribute("data-prompt");
+                    handleUserMessage(prompt);
+                });
             });
         }
     </script>

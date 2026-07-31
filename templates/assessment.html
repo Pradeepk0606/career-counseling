@@ -2,80 +2,96 @@
 {% load static %}
 {% load template_tags %}
 
-{% block title %}Assessment Score{% endblock title %}
+{% block title %}{{ student.name }} - Academic Dashboard{% endblock title %}
 
 {% block content %}
 
-<section class="py-3 bg-light">
+<section class="py-4 bg-light">
     <div class="container my-3">
-        <h4 class="mb-4">Welcome, {{ student.name }} <i class="fa-solid fa-smile ms-1 text-primary-emphasis"></i></h4>
-        <div class="row mb-5">
-            <div class="col-lg-12">
-                <div
-                    class="card border border-primary border-3 border-start-0 border-end-0 border-bottom-0 shadow mb-4">
-                    <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-chart-line me-1"></i> My
-                            Subject Performance</h6>
+        <!-- Header Banner -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 text-white overflow-hidden" style="background: var(--hero-gradient);">
+            <div class="card-body p-4 p-lg-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+                <div>
+                    <span class="badge bg-warning text-dark font-monospace mb-2 px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-id-badge me-1"></i> Code: {{ student.entry_code }}</span>
+                    <h2 class="fw-bold mb-1">Welcome back, {{ student.name }}! <i class="fa-solid fa-hand-wave text-warning ms-1"></i></h2>
+                    <p class="text-white-50 m-0 fs-5">Here is your comprehensive academic performance breakdown & career discipline forecast.</p>
+                </div>
+                <div class="mt-3 mt-md-0">
+                    <button class="btn btn-light rounded-pill px-4 fw-bold shadow-sm me-2" onclick="window.print()">
+                        <i class="fa-solid fa-print me-1 text-primary"></i> Print Report
+                    </button>
+                    <a href="https://roadmap.sh" target="_blank" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">
+                        <i class="fa-solid fa-map me-1"></i> Explore Roadmaps
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Subject Performance Growth Chart -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                    <div class="card-header bg-white py-3 px-4 border-0 d-flex align-items-center justify-content-between">
+                        <h5 class="fw-bold m-0 text-primary"><i class="fa-solid fa-chart-line me-2 text-warning"></i> Overall Subject Averages</h5>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">Continuous Assessment + Exam</span>
                     </div>
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="subject-growth-chart" width="800" height="400"></canvas>
+                    <div class="card-body px-4 pb-4">
+                        <div style="height: 320px;" class="position-relative">
+                            <canvas id="subject-growth-chart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Career Prediction Section -->
         {% if most_common_subject_field %}
-        <div class="row mb-5">
-            <div class="col-lg-12">
-                <div
-                    class="card border border-primary border-3 border-start-0 border-end-0 border-bottom-0 shadow mb-4">
-                    <div class="card-header border-0 py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary"><i
-                                class="fa-solid fa-magic-wand-sparkles me-1"></i> Career Prediction</h6>
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                    <div class="card-header text-white py-3 px-4 border-0" style="background: var(--primary-gradient);">
+                        <h5 class="fw-bold m-0"><i class="fa-solid fa-wand-magic-sparkles me-2 text-warning"></i> AI Career Path Recommendation</h5>
                     </div>
-                    <div class="card-body px-4">
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <h6 class="text-primary-emphasis mb-3">Most Suitable Career Field</h6>
-                                <div class="d-flex align-items-center mb-4">
-                                    <div class="flex-shrink-0">
-                                        <i class="fa-solid fa-book text-primary"></i>
-                                    </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-1 text-body-secondary">Suggested Field</h6>
-                                        <p class="mb-0">{{ most_common_subject_field.name }}</p>
-                                    </div>
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="row g-4">
+                            <div class="col-lg-5 border-end-lg">
+                                <div class="p-3 bg-primary-subtle rounded-4 mb-4">
+                                    <span class="text-primary small text-uppercase fw-bold d-block mb-1">Recommended Study Field</span>
+                                    <h3 class="fw-bold text-primary m-0"><i class="fa-solid fa-graduation-cap me-2"></i>{{ most_common_subject_field.name }}</h3>
                                 </div>
 
-                                <h6>How did we arrive at this?</h6>
-                                <small>We computed your top 3 subjects based on highest scores, and got the career field most common amongst the three.</small>
+                                <h6 class="fw-bold text-slate-800 mb-2"><i class="fa-solid fa-circle-question text-warning me-1"></i> How was this computed?</h6>
+                                <p class="text-muted small mb-3">Based on your highest cumulative scores across Junior Secondary subjects, your primary strength points directly to the <strong>{{ most_common_subject_field.name }}</strong> track.</p>
+                                
+                                <h6 class="fw-bold mb-3 text-slate-800">Your Top Subjects:</h6>
                                 {% for subject in top_subjects %}
-                                <div class="d-flex align-items-center my-4">
-                                    <div class="flex-shrink-0">
-                                        <i class="fa-solid fa-circle text-primary"></i>
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2 bg-light border">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                                            <i class="fa-solid fa-book-bookmark small"></i>
+                                        </div>
+                                        <span class="fw-semibold text-slate-800">{{ subject.subject__name }}</span>
                                     </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-1 text-body-secondary">{{ subject.total_score }}</h6>
-                                        <p class="mb-0">{{ subject.subject__name }}</p>
-                                    </div>
+                                    <span class="badge bg-primary rounded-pill fs-6 px-3">{{ subject.total_score }} pts</span>
                                 </div>
                                 {% endfor %}
                             </div>
+
                             <div class="col-lg-7">
-                                <h6>Related Disciplines for your Predicted Field of Study</h6>
-                                {% for discipline in related_disciplines %}
-                                <div class="d-flex align-items-center my-4">
-                                    <div class="flex-shrink-0">
-                                        <i class="fa-solid fa-briefcase text-primary"></i>
+                                <h5 class="fw-bold mb-3 text-slate-800"><i class="fa-solid fa-briefcase text-primary me-2"></i> Recommended Career Disciplines</h5>
+                                <div class="row g-3">
+                                    {% for discipline in related_disciplines %}
+                                    <div class="col-12">
+                                        <div class="p-3 rounded-3 border bg-light h-100 hover-lift transition-all">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-check-circle text-success me-2"></i>
+                                                <h6 class="fw-bold m-0 text-slate-900">{{ discipline.name }}</h6>
+                                            </div>
+                                            <p class="text-muted small m-0">{{ discipline.description }}</p>
+                                        </div>
                                     </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-1 text-body-secondary">{{ discipline.name }}</h6>
-                                        <p class="mb-0">{{ discipline.description }}</p>
-                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -84,82 +100,63 @@
         </div>
         {% endif %}
 
-        <div class="row mb-5">
+        <!-- Grade Level Charts & Stats Grid -->
+        <div class="row g-4">
             <div class="col-lg-8">
                 {% for grade_level, subject_scores in assessment_scores_by_grade_subject.items %}
-                <div
-                    class="card border border-primary border-3 border-start-0 border-end-0 border-bottom-0 shadow mb-4">
-                    <div class="card-header border-0 py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-chart-simple me-1"></i> My
-                            {{ grade_level.name }} Grades</h6>
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+                    <div class="card-header bg-white py-3 px-4 border-0 d-flex align-items-center justify-content-between">
+                        <h5 class="fw-bold m-0 text-primary"><i class="fa-solid fa-chart-bar me-2 text-warning"></i> {{ grade_level.name }} Subject Performance</h5>
+                        <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-1 small">Continuous Assessment + Exam</span>
                     </div>
-                    <div class="card-body">
-                        <div class="chart-area">
+                    <div class="card-body px-4 pb-4">
+                        <div style="height: 280px;" class="position-relative">
                             <canvas id="chart-{{ grade_level.name }}"></canvas>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
+
             <div class="col-lg-4">
-                <div
-                    class="card border border-primary border-3 border-start-0 border-end-0 border-bottom-0 shadow mb-3">
-                    <div class="card-header border-0 py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-ranking-star me-1"></i> Best
-                            Performing Subject</h6>
+                <!-- Best Subject Card -->
+                {% if highest_subject %}
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+                    <div class="card-header bg-warning text-dark py-3 px-4 border-0">
+                        <h5 class="fw-bold m-0"><i class="fa-solid fa-trophy me-2"></i> Best Subject</h5>
                     </div>
-                    <div class="card-body px-4">
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="flex-shrink-0">
-                                <i class="fa-solid fa-person-chalkboard text-primary"></i>
+                    <div class="card-body p-4">
+                        <div class="text-center py-2">
+                            <div class="bg-warning-subtle text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                                <i class="fa-solid fa-crown fa-2x"></i>
                             </div>
-                            <div class="ms-3">
-                                <h6 class="mb-1 text-body-secondary">Name</h6>
-                                <p class="mb-0">{{ highest_subject.subject__name }}</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="flex-shrink-0">
-                                <i class="fa-solid fa-star text-primary"></i>
-                            </div>
-                            <div class="ms-3">
-                                <h6 class="mb-1 text-body-secondary">Score</h6>
-                                <p class="mb-0">{{ highest_subject.total_score }}</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="flex-shrink-0">
-                                <i class="fa-solid fa-book text-primary"></i>
-                            </div>
-                            <div class="ms-3">
-                                <h6 class="mb-1 text-body-secondary">Field</h6>
-                                <p class="mb-0">{{ highest_subject.subject_field.name }}</p>
-                            </div>
+                            <h3 class="fw-bold text-slate-900 m-0">{{ highest_subject.subject__name }}</h3>
+                            <span class="badge bg-primary rounded-pill px-3 py-2 fs-6 my-2">Score: {{ highest_subject.total_score }}</span>
+                            {% if highest_subject.subject_field %}
+                            <p class="text-muted small m-0">Field: <strong>{{ highest_subject.subject_field.name }}</strong></p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                <div
-                    class="card border border-primary border-3 border-start-0 border-end-0 border-bottom-0 shadow mb-3">
-                    <div class="card-header border-0 py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-graduation-cap me-1"></i>
-                            Overall Subject Totals</h6>
+                {% endif %}
+
+                <!-- Overall Totals Summary -->
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                    <div class="card-header bg-primary text-white py-3 px-4 border-0">
+                        <h5 class="fw-bold m-0"><i class="fa-solid fa-list-check me-2"></i> Subject Totals</h5>
                     </div>
-                    <div class="card-body px-4">
+                    <div class="card-body p-3 overflow-auto" style="max-height: 400px;">
                         {% for subject_total in subject_totals %}
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="flex-shrink-0">
-                                <i class="fa-solid fa-circle text-primary"></i>
-                            </div>
-                            <div class="ms-3">
-                                <h6 class="mb-1 text-body-secondary">{{ subject_total.total_score }}</h6>
-                                <p class="mb-0">{{ subject_total.subject__name }}</p>
-                            </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-2 bg-light">
+                            <span class="fw-semibold text-slate-800">{{ subject_total.subject__name }}</span>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill font-monospace px-3 py-2">{{ subject_total.total_score }} pts</span>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
@@ -168,72 +165,71 @@
 {% block script %}
 
 <script>
-    // Get the data for the line chart from the Django context
+    // Line Chart for Subject Average Scores
     var subjectData = {
         labels: [{% for subject_score in subject_average_scores %}'{{ subject_score.subject__name }}', {% endfor %}],
-    datasets: [
-        {
-            label: 'Average Grade',
-            data: [{% for subject_score in subject_average_scores %}{{ subject_score.avg_total_score }}, {% endfor %}],
-        borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 2,
-            },
-        ]
+        datasets: [{
+            label: 'Average Score',
+            data: [{% for subject_score in subject_average_scores %}{{ subject_score.avg_total_score|floatformat:1 }}, {% endfor %}],
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.15)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 5,
+            pointBackgroundColor: '#1d4ed8'
+        }]
     };
 
-    // Create the line chart
-    var ctx = document.getElementById("subject-growth-chart").getContext("2d");
-    var lineChart = new Chart(ctx, {
-        type: 'line',
-        data: subjectData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Average Grade',
-                    },
-                },
-            },
-        },
-    });
-</script>
+    var ctxGrowth = document.getElementById("subject-growth-chart");
+    if (ctxGrowth) {
+        new Chart(ctxGrowth.getContext("2d"), {
+            type: 'line',
+            data: subjectData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+    }
 
-<script>
+    // Bar Charts for Grade Levels
     {% for grade_level, subject_scores in assessment_scores_by_grade_subject.items %}
-    var ctx = document.getElementById("chart-{{ grade_level.name }}").getContext("2d");
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                {% for subject, scores in subject_scores.items %}
+    var ctxGrade = document.getElementById("chart-{{ grade_level.name }}");
+    if (ctxGrade) {
+        new Chart(ctxGrade.getContext("2d"), {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for subject, scores in subject_scores.items %}
                         "{{ subject.name }}",
                     {% endfor %}
                 ],
-        datasets: [{
-            label: 'Total Score',
-            data: [
-                {% for subject, scores in subject_scores.items %}
-                            {{ scores| sum_total_scores }},
-        {% endfor %}
-    ],
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
+                datasets: [{
+                    label: 'Total Score',
+                    data: [
+                        {% for subject, scores in subject_scores.items %}
+                            {{ scores|sum_total_scores }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(59, 130, 246, 0.75)',
+                    borderColor: '#1d4ed8',
+                    borderWidth: 1,
+                    borderRadius: 8
                 }]
             },
-        options: {
-        scales: {
-            y: {
-                beginAtZero: true
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
             }
-        }
-    }
         });
+    }
     {% endfor %}
 </script>
 
