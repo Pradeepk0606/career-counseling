@@ -45,6 +45,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "career.middleware.ServerlessInitMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -69,6 +70,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 import os
 import shutil
+import dj_database_url
 
 IS_VERCEL = "VERCEL" in os.environ or "AWS_LAMBDA_FUNCTION_NAME" in os.environ
 
@@ -85,16 +87,24 @@ if IS_VERCEL:
 else:
     target_db_name = config("SQL_DATABASE", default=str(BASE_DIR / "db.sqlite3"))
 
-DATABASES = {
-    "default": {
-        "ENGINE": config("SQL_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": target_db_name,
-        "USER": config("SQL_USER", default=""),
-        "PASSWORD": config("SQL_PASSWORD", default=""),
-        "HOST": config("SQL_HOST", default=""),
-        "PORT": config("SQL_PORT", default=""),
-    },
-}
+if os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL"):
+    db_config = dj_database_url.config(default=os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL"))
+    DATABASES = {"default": db_config}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": config("SQL_ENGINE", default="django.db.backends.sqlite3"),
+            "NAME": target_db_name,
+            "USER": config("SQL_USER", default=""),
+            "PASSWORD": config("SQL_PASSWORD", default=""),
+            "HOST": config("SQL_HOST", default=""),
+            "PORT": config("SQL_PORT", default=""),
+            "OPTIONS": {
+                "timeout": 30,
+            },
+        },
+    }
+
 
 
 
