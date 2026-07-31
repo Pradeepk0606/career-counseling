@@ -14,6 +14,16 @@
 
 ---
 
+## 🔑 Default Credentials
+
+- **Admin Portal (`/admin/`)**:
+  - **Username**: `admin`
+  - **Password**: `admin123`
+- **Student Portal Access Code**: `1234567` (or generate custom codes via Admin Dashboard)
+
+---
+
+
 ## 🚀 Quick Start Guide
 
 ### 1. Clone the Repository
