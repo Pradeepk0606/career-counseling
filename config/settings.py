@@ -67,16 +67,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+import os
+import shutil
+
+IS_VERCEL = "VERCEL" in os.environ or "AWS_LAMBDA_FUNCTION_NAME" in os.environ
+
+if IS_VERCEL:
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+    db_path = Path("/tmp") / "db.sqlite3"
+    initial_db = BASE_DIR / "db.sqlite3"
+    if initial_db.exists() and not db_path.exists():
+        try:
+            shutil.copyfile(initial_db, db_path)
+        except Exception:
+            pass
+    default_db_name = str(db_path)
+else:
+    default_db_name = str(BASE_DIR / "db.sqlite3")
+
 DATABASES = {
     "default": {
         "ENGINE": config("SQL_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": config("SQL_DATABASE", default=str(BASE_DIR / "db.sqlite3")),
+        "NAME": config("SQL_DATABASE", default=default_db_name),
         "USER": config("SQL_USER", default=""),
         "PASSWORD": config("SQL_PASSWORD", default=""),
         "HOST": config("SQL_HOST", default=""),
         "PORT": config("SQL_PORT", default=""),
     },
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
