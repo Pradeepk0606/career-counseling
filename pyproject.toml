@@ -1,3 +1,20 @@
+[project]
+name = "career-counseling"
+version = "0.1.0"
+description = "Career Compass Web Application"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "coverage==7.4.4",
+    "crispy-bootstrap5==2024.2",
+    "Django==5.0.4",
+    "Faker==24.9.0",
+    "python-decouple==3.8",
+    "pre-commit==3.7.0",
+    "whitenoise>=6.6.0",
+    "gunicorn>=21.2.0",
+]
+
 [tool.black]
 line-length = 119
 target-version = ['py310']
@@ -25,13 +42,8 @@ select = [
   "I",   # isort
 ]
 
-# Avoid enforcing line-length violations (`E501`)
 ignore = ["E501"]
-
-# Avoid trying to fix flake8-bugbear (`B`) violations.
 unfixable = ["B"]
-
-# Exclude files and directories.
 extend-exclude = ["migrations", "manage.py"]
 
 [tool.ruff.pydocstyle]
